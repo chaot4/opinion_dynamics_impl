@@ -6,6 +6,36 @@
 std::size_t const number_of_colors = 2;
 
 //
+// DynamicsType
+//
+
+DynamicsType toDynamicsType(std::string const& dynamics_type_string)
+{
+	if (dynamics_type_string == "VoterModel") {
+		return DynamicsType::VoterModel;
+	}
+	else if (dynamics_type_string == "TwoChoices") {
+		return DynamicsType::TwoChoices;
+	}
+
+	Error("No matching dynamics type on call of toDynamicsType");
+	return DynamicsType::VoterModel; // FIXME: just to avoid warning for now
+}
+
+//
+// Color
+//
+
+std::string toString(Color color)
+{
+	switch (color) {
+	case Color::Red: return "red";
+	case Color::Blue: return "blue";
+	case Color::None: default: return "none";
+	}
+}
+
+//
 // Coloring
 //
 

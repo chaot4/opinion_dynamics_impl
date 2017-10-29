@@ -11,12 +11,19 @@
 
 void Graph::buildFromFile(std::string const& graph_file)
 {
+	filename = graph_file;
+
 	auto edges = readEdges(graph_file);
 	reduceToLargestScc(edges);
 	convertIDs(edges);
 	addAllReverseEdges(edges);
 	sortAndMakeUnique(edges);
 	fillOffsetsAndNeighbors(edges);
+}
+
+std::string const& Graph::getFilename() const
+{
+	return filename;
 }
 
 auto Graph::readEdges(std::string const& graph_file) const -> Edges
@@ -132,6 +139,11 @@ std::size_t Graph::getNumberOfNodes() const
 	return old_ids.size();
 }
 
+std::size_t Graph::getNumberOfEdges() const
+{
+	return neighbors.size();
+}
+
 std::size_t Graph::degree(NodeID node_id) const
 {
 	return offsets[node_id + 1] - offsets[node_id];
@@ -147,6 +159,13 @@ auto Graph::getNodesSortedByDegree() const -> std::vector<NodeID>
 	std::sort(node_ids.begin(), node_ids.end(), comp_degree);
 
 	return node_ids;
+}
+
+auto Graph::getNeighborRange(NodeID node_id) const -> NeighborRange
+{
+	auto const begin = neighbors.cbegin() + offsets[node_id];
+	auto const end = neighbors.cbegin() + offsets[node_id+1];
+	return NeighborRange(begin, end);
 }
 
 auto Graph::getRandomNeighbor(NodeID node_id, Random& random) const -> NodeID

@@ -15,10 +15,12 @@ private:
 	std::string const experiments_file;
 	std::string const result_files_prefix;
 
+	using ExperimentID = std::size_t;
+
 	ExperimentsData readExperiments(std::string const& experiments_file);
-	void run(ExperimentData const& experiment_data);
-	void writeResultToFile(ExperimentData const& experiment_data,
+	void run(ExperimentID id, ExperimentData const& experiment_data);
+	void writeResultToFile(ExperimentID id, ExperimentData const& experiment_data,
 	                       Result const& result, std::size_t round);
-	void writeSummaryToFile(ExperimentData const& experiment_data,
+	void writeSummaryToFile(ExperimentID id, ExperimentData const& experiment_data,
 	                        Results const& results);
 };

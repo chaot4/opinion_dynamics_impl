@@ -7,7 +7,11 @@
 #include <string>
 #include <vector>
 
-enum class DynamicsType { VoterModel, TwoChoices };
+enum class DynamicsType {
+	VoterModel,
+	TwoChoices,
+};
+DynamicsType toDynamicsType(std::string const& dynamics_type_string);
 
 struct ExperimentData
 {
@@ -15,19 +19,22 @@ struct ExperimentData
 	DynamicsType dynamics_type;
 	std::size_t number_of_rounds;
 	// TODO: add seed?
+
+	ExperimentData(std::string graph_file,
+	               DynamicsType dynamics_type,
+	               std::size_t number_of_rounds)
+		: graph_file(graph_file)
+		, dynamics_type(dynamics_type)
+		, number_of_rounds(number_of_rounds) {}
 };
 using ExperimentsData = std::vector<ExperimentData>;
 
-struct Result
-{
-	// TODO
-};
-using Results = std::vector<Result>;
-
 enum class Color : int_fast8_t {
 	Red = 0,
-	Blue = 1
+	Blue = 1,
+	None = -1
 };
+std::string toString(Color color);
 
 class Coloring
 {
@@ -47,6 +54,14 @@ private:
 	std::vector<Color> colors;
 	std::vector<std::size_t> color_counts;
 };
+
+struct Result
+{
+	std::string graph_file;
+	Color winning_color;
+	std::size_t number_of_rounds;
+};
+using Results = std::vector<Result>;
 
 class Random
 {

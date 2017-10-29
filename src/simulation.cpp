@@ -25,11 +25,9 @@ Result Simulation::run()
 		++round;
 	}
 
-	// collect results
-	Result result;
-	// TODO
-
-	return result;
+	assert(current_coloring.size() > 0);
+	auto winning_color = (round == max_rounds ? Color::None : current_coloring.get(0));
+	return Result{graph.getFilename(), winning_color, round};
 }
 
 void Simulation::clear()
