@@ -18,7 +18,7 @@ public:
 
 private:
 	// data strucutres
-	using ElementID = int; // TODO: make sure this type is not too small!
+	using ElementID = int64_t;
 	struct Element
 	{
 		ElementID const id;
