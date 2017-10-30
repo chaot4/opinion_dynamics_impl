@@ -36,7 +36,7 @@ auto Graph::readEdges(std::string const& graph_file) const -> Edges
 	}
 
 	std::string line;
-	NodeID source, target;
+	ParserNodeID source, target;
 	while (std::getline(file, line)) {
 		if (line.empty() || line[0] == '#') {
 			continue;
@@ -52,13 +52,13 @@ auto Graph::readEdges(std::string const& graph_file) const -> Edges
 
 void Graph::reduceToLargestScc(Edges& edges) const
 {
-	std::unordered_set<NodeID> nodes;
+	std::unordered_set<ParserNodeID> nodes;
 	for (auto const& edge: edges) {
 		nodes.insert(edge.first);
 		nodes.insert(edge.second);
 	}
 
-	auto largest_partition = UnionFind<NodeID>().run(nodes, edges);
+	auto largest_partition = UnionFind<ParserNodeID>().run(nodes, edges);
 
 	auto not_in_largest_partition = [&](Edge const& edge) {
 		assert(largest_partition.count(edge.first) == largest_partition.count(edge.second));
@@ -71,7 +71,7 @@ void Graph::reduceToLargestScc(Edges& edges) const
 void Graph::convertIDs(Edges& edges)
 {
 	// First fill to_id map while assigning IDs ...
-	std::unordered_map<NodeID, NodeID> to_id;
+	std::unordered_map<ParserNodeID, NodeID> to_id;
 	NodeID current_id = 0;
 	for (auto const& edge: edges) {
 		if (!to_id.count(edge.first)) {

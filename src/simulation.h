@@ -10,7 +10,7 @@ class Simulation
 {
 public:
 	Simulation (Graph const& graph, DynamicsType dynamics_type, Coloring initial_coloring);
-	Result run();
+	Result run(std::int64_t max_rounds);
 
 private:
 	Graph const& graph;
@@ -19,8 +19,8 @@ private:
 
 	Coloring current_coloring;
 	Coloring next_coloring;
-
-	std::size_t const max_rounds = 8000; // TODO: should be parametrizable
+	std::size_t max_rounds;
 
 	void clear();
+	std::vector<float> getColorVolumes() const;
 };

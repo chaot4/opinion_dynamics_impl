@@ -1,5 +1,6 @@
 #include "core_periphery.h"
 
+// FIXME: this is not correct if the graph is directed (which it isn't for now)
 Coloring calculateCorePeripheryColoring(Graph const& graph)
 {
 	Coloring coloring(graph.getNumberOfNodes(), Color::Blue);

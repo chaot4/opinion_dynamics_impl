@@ -2,9 +2,6 @@
 
 #include <chrono>
 
-// FIXME: this is a bit hack-ish
-std::size_t const number_of_colors = 2;
-
 //
 // DynamicsType
 //
@@ -46,7 +43,7 @@ Coloring::Coloring(std::size_t size)
 }
 
 Coloring::Coloring(std::size_t size, Color color)
-	: colors(size, color), color_counts(number_of_colors, 0)
+	: colors(size, color), color_counts(NUMBER_OF_COLORS, 0)
 {
 	color_counts[static_cast<std::size_t>(color)] = colors.size();
 }
@@ -96,6 +93,23 @@ bool Coloring::isUnimodal() const
 	}
 
 	return true;
+}
+
+Color Coloring::getWinningColor() const
+{
+	if (colors.empty()) { return Color::None; }
+	if (isUnimodal()) { return colors[0]; }
+	return Color::None;
+}
+
+std::vector<float> Coloring::getColorFractions() const
+{
+	std::vector<float> fractions(color_counts.size());
+	for (std::size_t i = 0; i < fractions.size(); ++i) {
+		fractions[i] = (float)color_counts[i]/colors.size();
+	}
+
+	return fractions;
 }
 
 //

@@ -1,1 +1,1 @@
-../exp_data/graphs/email-core.txt VoterModel 10
+../exp_data/graphs/email-core.txt TwoChoices -1 10

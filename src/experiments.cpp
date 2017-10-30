@@ -34,12 +34,13 @@ auto Experiments::readExperiments(std::string const& experiments_file) -> Experi
 		}
 
 		std::stringstream ss(line);
-		std::string graph_file, dynamics_type_string, number_of_rounds_string;
-		ss >> graph_file >> dynamics_type_string >> number_of_rounds_string;
+		std::string graph_file, dynamics_type_string, max_rounds_string, number_of_exps_string;
+		ss >> graph_file >> dynamics_type_string >> max_rounds_string >> number_of_exps_string;
 
 		experiments_data.emplace_back(graph_file,
 		                              toDynamicsType(dynamics_type_string),
-		                              std::stoull(number_of_rounds_string));
+		                              std::stoll(max_rounds_string),
+									  std::stoull(number_of_exps_string));
 	}
 
 	return experiments_data;
@@ -54,8 +55,8 @@ void Experiments::run(ExperimentID id, ExperimentData const& experiment_data)
 	Simulation simulation(graph, experiment_data.dynamics_type, initial_coloring);
 
 	Results results;
-	for (std::size_t round = 0; round < experiment_data.number_of_rounds; ++round) {
-		results.push_back(simulation.run());
+	for (std::size_t round = 0; round < experiment_data.number_of_exps; ++round) {
+		results.push_back(simulation.run(experiment_data.max_rounds));
 		writeResultToFile(id, experiment_data, results.back(), round);
 	}
 
@@ -72,9 +73,11 @@ void Experiments::writeResultToFile(ExperimentID id, ExperimentData const& exper
 		Error("The experiments file couldn't be opened. Filename: " + exp_filename);
 	}
 
-	file << result.graph_file << " "
-	     << toString(result.winning_color) << " "
-	     << result.number_of_rounds << "\n";
+	file << result.graph_file << " ";
+	file << toString(result.winning_color) << " ";
+	for (auto fraction: result.color_fractions) { file << fraction << " "; }
+	for (auto volume: result.color_volumes) { file << volume << " "; }
+	file << result.number_of_rounds << "\n";
 }
 
 void Experiments::writeSummaryToFile(ExperimentID id, ExperimentData const& experiment_data,

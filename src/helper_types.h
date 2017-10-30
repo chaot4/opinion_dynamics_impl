@@ -17,15 +17,17 @@ struct ExperimentData
 {
 	std::string graph_file;
 	DynamicsType dynamics_type;
-	std::size_t number_of_rounds;
-	// TODO: add seed?
+	std::int64_t max_rounds;
+	std::size_t number_of_exps;
 
 	ExperimentData(std::string graph_file,
 	               DynamicsType dynamics_type,
-	               std::size_t number_of_rounds)
+	               std::int64_t max_rounds,
+				   std::size_t number_of_exps)
 		: graph_file(graph_file)
 		, dynamics_type(dynamics_type)
-		, number_of_rounds(number_of_rounds) {}
+		, max_rounds(max_rounds)
+		, number_of_exps(number_of_exps) {}
 };
 using ExperimentsData = std::vector<ExperimentData>;
 
@@ -35,6 +37,8 @@ enum class Color : int_fast8_t {
 	None = -1
 };
 std::string toString(Color color);
+// FIXME: this is a bit hack-ish
+std::size_t const NUMBER_OF_COLORS = 2;
 
 class Coloring
 {
@@ -50,6 +54,10 @@ public:
 	void swap(Coloring& coloring);
 	bool isUnimodal() const;
 
+	Color getWinningColor() const;
+	std::vector<float> getColorFractions() const;
+	std::vector<float> getColorVolumes() const;
+
 private:
 	std::vector<Color> colors;
 	std::vector<std::size_t> color_counts;
@@ -59,6 +67,8 @@ struct Result
 {
 	std::string graph_file;
 	Color winning_color;
+	std::vector<float> color_fractions;
+	std::vector<float> color_volumes;
 	std::size_t number_of_rounds;
 };
 using Results = std::vector<Result>;
