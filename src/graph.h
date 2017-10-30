@@ -10,8 +10,7 @@ class Graph
 public:
 	// member types
 	using NodeID = std::size_t;
-	 // TODO: This should best be a 128 bit type.
-	using ParserNodeID = long long unsigned int;
+	using ParserNodeID = std::string;
 	using Neighbors = std::vector<NodeID>;
 	class NeighborRange
 	{
@@ -48,19 +47,21 @@ private:
 	std::string filename;
 
 	// node structures
-	std::vector<NodeID> old_ids;
+	std::vector<ParserNodeID> old_ids;
 
 	// edge structures
 	std::vector<std::size_t> offsets;
 	Neighbors neighbors;
 
 	// helper definitions and functions for buildFromFile
-	using Edge = std::pair<ParserNodeID, ParserNodeID>;
+	using ParserEdge = std::pair<ParserNodeID, ParserNodeID>;
+	using ParserEdges = std::vector<ParserEdge>;
+	using Edge = std::pair<NodeID, NodeID>;
 	using Edges = std::vector<Edge>;
 
-	Edges readEdges(std::string const& graph_file) const;
-	void reduceToLargestScc(Edges& edges) const;
-	void convertIDs(Edges& edges);
+	ParserEdges readEdges(std::string const& graph_file) const;
+	void reduceToLargestScc(ParserEdges& edges) const;
+	Edges convertIDs(ParserEdges& edges);
 	void addAllReverseEdges(Edges& edges) const;
 	void sortAndMakeUnique(Edges& edges) const;
 	void fillOffsetsAndNeighbors(Edges const& edges);

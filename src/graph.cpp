@@ -13,9 +13,9 @@ void Graph::buildFromFile(std::string const& graph_file)
 {
 	filename = graph_file;
 
-	auto edges = readEdges(graph_file);
-	reduceToLargestScc(edges);
-	convertIDs(edges);
+	auto parser_edges = readEdges(graph_file);
+	reduceToLargestScc(parser_edges);
+	auto edges = convertIDs(parser_edges);
 	addAllReverseEdges(edges);
 	sortAndMakeUnique(edges);
 	fillOffsetsAndNeighbors(edges);
@@ -26,9 +26,9 @@ std::string const& Graph::getFilename() const
 	return filename;
 }
 
-auto Graph::readEdges(std::string const& graph_file) const -> Edges
+auto Graph::readEdges(std::string const& graph_file) const -> ParserEdges
 {
-	Edges edges;
+	ParserEdges parser_edges;
 
 	std::ifstream file(graph_file);
 	if (!file.is_open()) {
@@ -44,56 +44,61 @@ auto Graph::readEdges(std::string const& graph_file) const -> Edges
 
 		std::stringstream ss(line);
 		ss >> source >> target;
-		edges.emplace_back(source, target);
+		parser_edges.emplace_back(source, target);
 	}
 
-	return edges;
+	return parser_edges;
 }
 
-void Graph::reduceToLargestScc(Edges& edges) const
+void Graph::reduceToLargestScc(ParserEdges& parser_edges) const
 {
 	std::unordered_set<ParserNodeID> nodes;
-	for (auto const& edge: edges) {
-		nodes.insert(edge.first);
-		nodes.insert(edge.second);
+	for (auto const& parser_edge: parser_edges) {
+		nodes.insert(parser_edge.first);
+		nodes.insert(parser_edge.second);
 	}
 
-	auto largest_partition = UnionFind<ParserNodeID>().run(nodes, edges);
+	auto largest_partition = UnionFind<ParserNodeID>().run(nodes, parser_edges);
 
-	auto not_in_largest_partition = [&](Edge const& edge) {
-		assert(largest_partition.count(edge.first) == largest_partition.count(edge.second));
-		return !largest_partition.count(edge.first);
+	auto not_in_largest_partition = [&](ParserEdge const& parser_edge) {
+		return !largest_partition.count(parser_edge.first);
 	};
-	auto first_to_erase = std::remove_if(edges.begin(), edges.end(), not_in_largest_partition);
-	edges.erase(first_to_erase, edges.end());
+	auto first_to_erase = std::remove_if(parser_edges.begin(),
+	                                     parser_edges.end(),
+	                                     not_in_largest_partition);
+	parser_edges.erase(first_to_erase, parser_edges.end());
 }
 
-void Graph::convertIDs(Edges& edges)
+auto Graph::convertIDs(ParserEdges& parser_edges) -> Edges
 {
 	// First fill to_id map while assigning IDs ...
 	std::unordered_map<ParserNodeID, NodeID> to_id;
 	NodeID current_id = 0;
-	for (auto const& edge: edges) {
-		if (!to_id.count(edge.first)) {
-			to_id.emplace(edge.first, current_id);
-			old_ids.push_back(edge.first);
+	for (auto const& parser_edge: parser_edges) {
+		if (!to_id.count(parser_edge.first)) {
+			to_id.emplace(parser_edge.first, current_id);
+			old_ids.push_back(parser_edge.first);
 
 			++current_id;
 		}
 
-		if (!to_id.count(edge.second)) {
-			to_id.emplace(edge.second, current_id);
-			old_ids.push_back(edge.second);
+		if (!to_id.count(parser_edge.second)) {
+			to_id.emplace(parser_edge.second, current_id);
+			old_ids.push_back(parser_edge.second);
 
 			++current_id;
 		}
 	}
 
-	// ... then renew all the values in edges
-	for (auto& edge: edges) {
-		edge.first = to_id.at(edge.first);
-		edge.second = to_id.at(edge.second);
+	// ... then write new edges with new IDs into new edges vector
+	Edges edges;
+	for (auto& parser_edge: parser_edges) {
+		auto source_id = to_id.at(parser_edge.first);
+		auto target_id = to_id.at(parser_edge.second);
+		edges.emplace_back(source_id, target_id);
 	}
+
+	return edges;
 }
 
 void Graph::addAllReverseEdges(Edges& edges) const
