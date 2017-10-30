@@ -9,12 +9,12 @@ Coloring calculateCorePeripheryColoring(Graph const& graph)
 
 	for (auto node_id: graph.getNodesSortedByDegree()) {
 		// update I(C,C)
-		for (auto node_id: graph.getNeighborRange(node_id)) {
-			icc += (coloring.get(node_id) == Color::Red ? 1 : 0);
+		for (auto neighbor_id: graph.getNeighborRange(node_id)) {
+			icc += (coloring.get(neighbor_id) == Color::Red ? 1 : 0);
 		}
 		// update I(P,P)
-		for (auto node_id: graph.getNeighborRange(node_id)) {
-			icc -= (coloring.get(node_id) == Color::Blue ? 1 : 0);
+		for (auto neighbor_id: graph.getNeighborRange(node_id)) {
+			ipp -= (coloring.get(neighbor_id) == Color::Blue ? 1 : 0);
 		}
 
 		// put new node into core

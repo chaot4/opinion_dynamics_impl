@@ -100,7 +100,8 @@ void Graph::addAllReverseEdges(Edges& edges) const
 {
 	// Note: We use this type of loop as we cannot use a range-based loop due to
 	// possible iterator invalidation on push.
-	for (std::size_t i = 0; i < edges.size(); ++i) {
+	auto old_size = edges.size();
+	for (std::size_t i = 0; i < old_size; ++i) {
 		auto const& edge = edges[i];
 		edges.emplace_back(edge.second, edge.first);
 	}
@@ -132,6 +133,7 @@ void Graph::fillOffsetsAndNeighbors(Edges const& edges)
 		// neighbors
 		neighbors.push_back(edge.second);
 	}
+	offsets.push_back(neighbors.size());
 }
 
 std::size_t Graph::getNumberOfNodes() const
@@ -151,7 +153,8 @@ std::size_t Graph::degree(NodeID node_id) const
 
 auto Graph::getNodesSortedByDegree() const -> std::vector<NodeID>
 {
-	std::vector<NodeID> node_ids;
+	std::vector<NodeID> node_ids(getNumberOfNodes());
+	std::iota(node_ids.begin(), node_ids.end(), 0);
 
 	auto comp_degree = [&](NodeID node_id1, NodeID node_id2) {
 		return degree(node_id1) > degree(node_id2);

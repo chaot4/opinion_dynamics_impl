@@ -106,7 +106,7 @@ auto UnionFind<T>::findRoot(ElementID const id) -> ElementID
 
 	// path compression
 	current_id = id;
-	while (elements[current_id].parent_id != root) {
+	while (current_id != root) {
 		auto parent_id = elements[current_id].parent_id;
 		elements[current_id].parent_id = root;
 		current_id = parent_id;

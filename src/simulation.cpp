@@ -19,7 +19,6 @@ Result Simulation::run()
 	// run simulation
 	std::size_t round = 0;
 	while (round < max_rounds && !current_coloring.isUnimodal()) {
-
 		dynamics.simulateOneRound(current_coloring, next_coloring);
 		current_coloring.swap(next_coloring);
 		++round;
