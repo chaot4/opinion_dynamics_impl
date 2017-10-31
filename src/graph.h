@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+// TODO: extract scc for directed graphs
+
 class Graph
 {
 public:

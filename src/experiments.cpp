@@ -54,6 +54,8 @@ void Experiments::run(ExperimentID id, ExperimentData const& experiment_data)
 	auto initial_coloring = calculateCorePeripheryColoring(graph);
 	Simulation simulation(graph, experiment_data.dynamics_type, initial_coloring);
 
+	// TODO: call a function which prints graph information etc. here
+
 	Results results;
 	for (std::size_t round = 0; round < experiment_data.number_of_exps; ++round) {
 		results.push_back(simulation.run(experiment_data.max_rounds));

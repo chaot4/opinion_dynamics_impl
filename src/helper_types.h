@@ -1,6 +1,7 @@
 #pragma once
 
 // TODO: rename to "basic_types" or someting
+// TODO: maybe we should add some of those types to other files or even types
 #include "defs.h"
 
 #include <random>
