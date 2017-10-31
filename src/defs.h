@@ -20,7 +20,8 @@
 #define Print(x) do { std::cout << x << std::endl; } while (0)
 #endif
 
-#define Error(x) do { std::cerr << "Error: " << x << std::endl; } while (0)
+#define Error(x) do { std::cerr << "Error: " << x << std::endl;\
+                      std::exit(EXIT_FAILURE); } while (0)
 
 // assert macro
 
