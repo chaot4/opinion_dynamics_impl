@@ -64,7 +64,7 @@ void Coloring::set(std::size_t index, Color new_color)
 
 void Coloring::assign(Coloring const& coloring)
 {
-	assert(size() == coloring.size());
+	debug_assert(size() == coloring.size());
 
 	auto const& other_colors = coloring.colors;
 	auto const& other_counts = coloring.color_counts;

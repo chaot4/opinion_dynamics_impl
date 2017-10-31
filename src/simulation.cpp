@@ -7,7 +7,7 @@ Simulation::Simulation(Graph const& graph, DynamicsType dynamics_type,
 	: graph(graph), dynamics(dynamics_type, graph), initial_coloring(initial_coloring),
 	current_coloring(graph.getNumberOfNodes()), next_coloring(graph.getNumberOfNodes())
 {
-	assert(initial_coloring.size() == graph.getNumberOfNodes());
+	debug_assert(initial_coloring.size() == graph.getNumberOfNodes());
 
 	clear();
 }
@@ -25,7 +25,7 @@ Result Simulation::run(std::int64_t max_rounds)
 		++round;
 	}
 
-	assert(current_coloring.size() > 0);
+	debug_assert(current_coloring.size() > 0);
 	return Result{
 		graph.getFilename(),
 		current_coloring.getWinningColor(),

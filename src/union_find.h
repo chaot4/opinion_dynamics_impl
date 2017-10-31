@@ -83,12 +83,9 @@ void UnionFind<T>::initDataStructures(std::unordered_set<T> const& base_set)
 	ElementID id = 0;
 	for (auto value: base_set) {
 		elements.emplace_back(id, value);
-		auto pair = to_id.emplace(value, id);
+		to_id.emplace(value, id);
 
 		++id;
-
-		// Assert that the element didn't already exist
-		assert(pair.second);
 	}
 
 	max_id = 0;

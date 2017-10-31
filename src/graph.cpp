@@ -180,7 +180,7 @@ auto Graph::getNeighborRange(NodeID node_id) const -> NeighborRange
 
 auto Graph::getRandomNeighbor(NodeID node_id, Random& random) const -> NodeID
 {
-	assert(degree(node_id) != 0);
+	debug_assert(degree(node_id) != 0);
 
 	auto neighbor_offset = random.getSizeT(0, degree(node_id) - 1);
 	auto neighbor_index = offsets[node_id] + neighbor_offset;
