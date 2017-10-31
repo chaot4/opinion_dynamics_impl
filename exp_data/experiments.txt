@@ -1,2 +1,2 @@
 ../exp_data/graphs/email-core.txt TwoChoices -1 10
-../exp_data/graphs/sn-twitter-combined.txt TwoChoices 16000 1
+# ../exp_data/graphs/sn-twitter-combined.txt TwoChoices 16000 1
