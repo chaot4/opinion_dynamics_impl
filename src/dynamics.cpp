@@ -10,8 +10,10 @@ void Dynamics::simulateOneRound(Coloring const& current_coloring,
 	switch (type) {
 	case DynamicsType::VoterModel:
 		executeVoterModel(current_coloring, next_coloring);
+		break;
 	case DynamicsType::TwoChoices:
 		executeTwoChoices(current_coloring, next_coloring);
+		break;
 	}
 }
 
