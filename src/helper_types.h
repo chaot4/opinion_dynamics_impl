@@ -90,3 +90,8 @@ private:
 	unsigned int seed;
 	std::default_random_engine generator;
 };
+
+enum class CPMethod {
+	Paper,
+	EG // Emilio-Giacomo method (named after its famous inventors)
+};

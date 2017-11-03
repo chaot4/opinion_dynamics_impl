@@ -47,9 +47,8 @@ std::vector<float> Simulation::getColorVolumes() const
 
 	// normalize
 	std::vector<float> volume(NUMBER_OF_COLORS);
-	auto sum = std::accumulate(counts.begin(), counts.end(), 0);
 	for (std::size_t i = 0; i < volume.size(); ++i) {
-		volume[i] = (float)counts[i]/sum;
+		volume[i] = (float)counts[i]/graph.getNumberOfEdges();
 	}
 
 	return volume;
