@@ -2,8 +2,6 @@
 
 #include "core_periphery.h"
 #include "defs.h"
-#include "graph.h"
-#include "simulation.h"
 
 #include <fstream>
 #include <sstream>
@@ -54,7 +52,7 @@ void Experiments::run(ExperimentID id, ExperimentData const& experiment_data)
 	auto initial_coloring = calculateCorePeripheryColoring(graph);
 	Simulation simulation(graph, experiment_data.dynamics_type, initial_coloring);
 
-	// TODO: call a function which prints graph information etc. here
+	writeInformationToFile(id, experiment_data, graph, initial_coloring, simulation);
 
 	Results results;
 	for (std::size_t round = 0; round < experiment_data.number_of_exps; ++round) {
@@ -63,6 +61,48 @@ void Experiments::run(ExperimentID id, ExperimentData const& experiment_data)
 	}
 
 	writeSummaryToFile(id, experiment_data, results);
+}
+
+void Experiments::writeInformationToFile(ExperimentID id, ExperimentData const& experiment_data,
+                                         Graph const& graph, Coloring const& initial_coloring,
+                                         Simulation const& simulation)
+{
+	std::string const exp_filename = result_files_prefix + std::to_string(id);
+	std::ofstream file(exp_filename, std::ios_base::app);
+
+	if (!file.is_open()) {
+		Error("The experiments file couldn't be opened. Filename: " + exp_filename);
+	}
+
+	// exp data
+	file << "Experiment data\n";
+	file << "===============\n";
+	file << "ID: " << id << "\n";
+	file << "Graph file: " << experiment_data.graph_file << "\n";
+	file << "Dynamics type: " << toString(experiment_data.dynamics_type) << "\n";
+	file << "Max rounds: " << experiment_data.max_rounds << "\n";
+	file << "Number of experiments: " << experiment_data.number_of_exps << "\n";
+	file << "\n";
+
+	// graph data
+	file << "Graph data" << "\n";
+	file << "==========" << "\n";
+	file << "Number of nodes: " << graph.getNumberOfNodes() << "\n";
+	file << "Number of edges: " << graph.getNumberOfEdges() << "\n";
+	file << "\n";
+
+	// initial coloring data
+	file << "Initial coloring:\n";
+	file << "=================\n";
+	file << "Fractions (red/blue): ";
+	for (auto fraction: initial_coloring.getColorFractions()) { file << fraction << " "; }
+	file << "\nVolumes (red/blue): ";
+	for (auto volume: simulation.getColorVolumes()) { file << volume << " "; }
+	file << "\n";
+
+	file << "\n";
+	file << "Results: (winning_color frac_red frac_blue vol_red vol_blue num_rounds)\n";
+	file << "========\n";
 }
 
 void Experiments::writeResultToFile(ExperimentID id, ExperimentData const& experiment_data,
@@ -75,7 +115,7 @@ void Experiments::writeResultToFile(ExperimentID id, ExperimentData const& exper
 		Error("The experiments file couldn't be opened. Filename: " + exp_filename);
 	}
 
-	file << result.graph_file << " ";
+	file << "Round " << round << ": "; 
 	file << toString(result.winning_color) << " ";
 	for (auto fraction: result.color_fractions) { file << fraction << " "; }
 	for (auto volume: result.color_volumes) { file << volume << " "; }
@@ -88,5 +128,5 @@ void Experiments::writeSummaryToFile(ExperimentID id, ExperimentData const& expe
 	std::string const exp_filename = result_files_prefix + std::to_string(id);
 	std::ofstream file(exp_filename, std::ios_base::app);
 
-	file << "Summary: " << "\n"; // TODO: fill in whatever we want here
+	(void) file;
 }

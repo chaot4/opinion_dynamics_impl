@@ -19,6 +19,14 @@ DynamicsType toDynamicsType(std::string const& dynamics_type_string)
 	return DynamicsType::VoterModel; // FIXME: just to avoid warning for now
 }
 
+std::string toString(DynamicsType dynamics_type)
+{
+	switch (dynamics_type) {
+	case DynamicsType::VoterModel: return "VoterModel";
+	case DynamicsType::TwoChoices: return "TwoChoices";
+	}
+}
+
 //
 // Color
 //

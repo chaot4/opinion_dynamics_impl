@@ -13,6 +13,7 @@ enum class DynamicsType {
 	TwoChoices,
 };
 DynamicsType toDynamicsType(std::string const& dynamics_type_string);
+std::string toString(DynamicsType dynamics_type);
 
 struct ExperimentData
 {

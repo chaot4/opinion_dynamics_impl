@@ -12,6 +12,8 @@ public:
 	Simulation (Graph const& graph, DynamicsType dynamics_type, Coloring initial_coloring);
 	Result run(std::int64_t max_rounds);
 
+	std::vector<float> getColorVolumes() const;
+
 private:
 	Graph const& graph;
 	Dynamics dynamics;
@@ -22,5 +24,4 @@ private:
 	std::size_t max_rounds;
 
 	void clear();
-	std::vector<float> getColorVolumes() const;
 };
