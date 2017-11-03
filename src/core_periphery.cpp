@@ -149,3 +149,35 @@ Coloring calculateCorePeripheryColoring(Graph const& graph, CPMethod method)
 		return paperMethod(graph);
 	}
 }
+
+std::pair<float, float> calcDominanceAndRobustness(Graph const& graph, Coloring const& coloring)
+{
+	using NodeID = Graph::NodeID;
+
+	std::size_t cc_count = 0;
+	std::size_t cp_count = 0;
+	std::size_t pp_count = 0;
+
+	for (NodeID source_id = 0; source_id < graph.getNumberOfNodes(); ++source_id) {
+		auto source_color = coloring.get(source_id);
+
+		for (auto target_id: graph.getNeighborRange(source_id)) {
+			auto target_color = coloring.get(target_id);
+
+			// this implicitly assumes that there are only two colors
+			if (source_color != target_color) {
+				++cp_count;
+			}
+			else if (source_color == Color::Blue) {
+				++pp_count;
+			}
+			else {
+				++cc_count;
+			}
+		}
+	}
+
+	float dominance = (float)cp_count/pp_count;
+	float robustness = (float)cc_count/cp_count;
+	return {dominance, robustness};
+}

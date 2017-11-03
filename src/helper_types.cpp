@@ -27,6 +27,30 @@ std::string toString(DynamicsType dynamics_type)
 }
 
 //
+// CPMethod
+//
+
+CPMethod toCPMethod(std::string const& cp_method_string)
+{
+	if (cp_method_string == "Paper") {
+		return CPMethod::Paper;
+	}
+	else if (cp_method_string == "Ours") {
+		return CPMethod::EG;
+	}
+
+	Error("No matching core extraction method on call of toCPMethod");
+}
+
+std::string toString(CPMethod cp_method)
+{
+	switch (cp_method) {
+	case CPMethod::Paper: return "Paper";
+	case CPMethod::EG: default: return "Ours";
+	}
+}
+
+//
 // Color
 //
 

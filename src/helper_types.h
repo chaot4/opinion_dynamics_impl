@@ -15,19 +15,29 @@ enum class DynamicsType {
 DynamicsType toDynamicsType(std::string const& dynamics_type_string);
 std::string toString(DynamicsType dynamics_type);
 
+enum class CPMethod { // TODO: chose less-dumb names
+	Paper,
+	EG // Emilio-Giacomo method (named after its famous inventors)
+};
+CPMethod toCPMethod(std::string const& cp_method_string);
+std::string toString(CPMethod cp_method);
+
 struct ExperimentData
 {
 	std::string graph_file;
 	DynamicsType dynamics_type;
+	CPMethod cp_method;
 	std::int64_t max_rounds;
 	std::size_t number_of_exps;
 
 	ExperimentData(std::string graph_file,
 	               DynamicsType dynamics_type,
+	               CPMethod cp_method,
 	               std::int64_t max_rounds,
-				   std::size_t number_of_exps)
+	               std::size_t number_of_exps)
 		: graph_file(graph_file)
 		, dynamics_type(dynamics_type)
+		, cp_method(cp_method)
 		, max_rounds(max_rounds)
 		, number_of_exps(number_of_exps) {}
 };
@@ -89,9 +99,4 @@ public:
 private:
 	unsigned int seed;
 	std::default_random_engine generator;
-};
-
-enum class CPMethod {
-	Paper,
-	EG // Emilio-Giacomo method (named after its famous inventors)
 };

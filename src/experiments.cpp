@@ -5,6 +5,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <tuple>
 
 void Experiments::run()
 {
@@ -32,11 +33,14 @@ auto Experiments::readExperiments(std::string const& experiments_file) -> Experi
 		}
 
 		std::stringstream ss(line);
-		std::string graph_file, dynamics_type_string, max_rounds_string, number_of_exps_string;
-		ss >> graph_file >> dynamics_type_string >> max_rounds_string >> number_of_exps_string;
+		std::string graph_file, dynamics_type_string, cp_method_string,
+		            max_rounds_string, number_of_exps_string;
+		ss >> graph_file >> dynamics_type_string >> cp_method_string
+		   >> max_rounds_string >> number_of_exps_string;
 
 		experiments_data.emplace_back(graph_file,
 		                              toDynamicsType(dynamics_type_string),
+									  toCPMethod(cp_method_string),
 		                              std::stoll(max_rounds_string),
 									  std::stoull(number_of_exps_string));
 	}
@@ -49,7 +53,7 @@ void Experiments::run(ExperimentID id, ExperimentData const& experiment_data)
 	Graph graph;
 	graph.buildFromFile(experiment_data.graph_file);
 
-	auto initial_coloring = calculateCorePeripheryColoring(graph);
+	auto initial_coloring = calculateCorePeripheryColoring(graph, experiment_data.cp_method);
 	Simulation simulation(graph, experiment_data.dynamics_type, initial_coloring);
 
 	writeInformationToFile(id, experiment_data, graph, initial_coloring, simulation);
@@ -80,6 +84,7 @@ void Experiments::writeInformationToFile(ExperimentID id, ExperimentData const& 
 	file << "ID: " << id << "\n";
 	file << "Graph file: " << experiment_data.graph_file << "\n";
 	file << "Dynamics type: " << toString(experiment_data.dynamics_type) << "\n";
+	file << "Core extraction method: " << toString(experiment_data.cp_method) << "\n";
 	file << "Max rounds: " << experiment_data.max_rounds << "\n";
 	file << "Number of experiments: " << experiment_data.number_of_exps << "\n";
 	file << "\n";
@@ -98,7 +103,10 @@ void Experiments::writeInformationToFile(ExperimentID id, ExperimentData const& 
 	for (auto fraction: initial_coloring.getColorFractions()) { file << fraction << " "; }
 	file << "\nVolumes (red/blue): ";
 	for (auto volume: simulation.getColorVolumes()) { file << volume << " "; }
-	file << "\n";
+	float dominance, robustness;
+	std::tie(dominance, robustness) = calcDominanceAndRobustness(graph, initial_coloring);
+	file << "\nDominance (c_d): " << dominance << "\n";
+	file << "Robustness (c_r): " << robustness << "\n";
 
 	file << "\n";
 	file << "Results: (winning_color frac_red frac_blue vol_red vol_blue num_rounds)\n";
