@@ -46,7 +46,11 @@ auto Graph::readEdges(std::string const& graph_file) const -> ParserEdges
 
 		std::stringstream ss(line);
 		ss >> source >> target;
-		parser_edges.emplace_back(source, target);
+
+		// remove loops as they are annoying
+		if (source != target) {
+			parser_edges.emplace_back(source, target);
+		}
 	}
 
 	return parser_edges;
