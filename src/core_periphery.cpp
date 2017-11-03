@@ -1,5 +1,6 @@
 #include "core_periphery.h"
 
+#include <algorithm>
 #include <unordered_map>
 #include <queue>
 
@@ -36,11 +37,24 @@ Coloring paperMethod(Graph const& graph)
 	return coloring;
 }
 
+// TODO: clean up this mess!
 Coloring egMethod(Graph const& graph)
 {
 	using NodeID = Graph::NodeID;
 
 	Coloring coloring(graph.getNumberOfNodes(), Color::Blue);
+
+	auto in_place_set_minus = [&](std::vector<NodeID>& vec1, std::vector<NodeID> const& vec2) {
+		auto vec2_it = vec2.begin();
+		auto pred =  [&](NodeID node_id) -> bool {
+			while  (vec2_it != vec2.end() && *vec2_it < node_id) {
+				++vec2_it;
+			}
+			return vec2_it != vec2.end() && *vec2_it == node_id;
+		};
+		auto first_to_erase = std::remove_if(vec1.begin(), vec1.end(), pred);
+		vec1.erase(first_to_erase, vec1.end());
+	};
 
 	auto find_densest_subgraph = [&]() {
 		using DegNode = std::pair<std::size_t, NodeID>;
@@ -49,6 +63,10 @@ Coloring egMethod(Graph const& graph)
 		std::unordered_map<NodeID, std::size_t> node_deg_map;
 		PQ pq;
 		std::size_t edge_count = 0;
+
+		double max_density = 0;
+		std::vector<NodeID> max_nodes;
+		std::vector<NodeID> max_nodes_diff;
 
 		for (NodeID node_id = 0; node_id < coloring.size(); ++node_id) {
 			if (coloring.get(node_id) == Color::Blue) {
@@ -61,12 +79,11 @@ Coloring egMethod(Graph const& graph)
 						++edge_count;
 					}
 				}
+
+				max_nodes.push_back(node_id);
 			}
 		}
 		edge_count /= 2;
-
-		double max_density = 0;
-		std::vector<NodeID> max_nodes;
 
 		while (!node_deg_map.empty()) {
 			// get node with lowest degree
@@ -78,6 +95,7 @@ Coloring egMethod(Graph const& graph)
 
 			// erase from map and adapt degrees
 			node_deg_map.erase(node_id);
+			max_nodes_diff.push_back(node_id);
 			for (auto neighbor_id: graph.getNeighborRange(node_id)) {
 				auto it = node_deg_map.find(neighbor_id);
 				if (it != node_deg_map.end()) {
@@ -91,11 +109,9 @@ Coloring egMethod(Graph const& graph)
 			double density = (double)edge_count/node_deg_map.size();
 			if (density > max_density) {
 				max_density = density;
-				// TODO: doing it like that seems a bit too dumb and costly.
-				max_nodes.clear();
-				for (auto const& node_deg: node_deg_map) {
-					max_nodes.push_back(node_deg.first);
-				}
+				std::sort(max_nodes_diff.begin(), max_nodes_diff.end());
+				in_place_set_minus(max_nodes, max_nodes_diff);
+				max_nodes_diff.clear();
 			}
 		}
 
