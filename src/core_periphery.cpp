@@ -56,7 +56,7 @@ Coloring egMethod(Graph const& graph)
 		vec1.erase(first_to_erase, vec1.end());
 	};
 
-	auto find_densest_subgraph = [&]() {
+	auto find_densest_subgraph = [&](std::size_t vol_c, std::size_t vol_p) {
 		using DegNode = std::pair<std::size_t, NodeID>;
 		using PQ = std::priority_queue<DegNode, std::vector<DegNode>, std::greater<DegNode>>;
 
@@ -81,6 +81,8 @@ Coloring egMethod(Graph const& graph)
 				}
 
 				max_nodes.push_back(node_id);
+				vol_c += degree;
+				vol_p -= degree;
 			}
 		}
 		edge_count /= 2;
@@ -104,6 +106,12 @@ Coloring egMethod(Graph const& graph)
 					--edge_count;
 				}
 			}
+			
+			// adapt vol_c, vol_p and check if we passed threshold
+			auto degree = graph.degree(node_id);
+			vol_c -= degree;
+			vol_p += degree;
+			if (vol_c > vol_p) { continue; } // TODO: make parametrizable from the exp file
 
 			// check for new max
 			double density = (double)edge_count/node_deg_map.size();
@@ -115,7 +123,8 @@ Coloring egMethod(Graph const& graph)
 			}
 		}
 
-		return max_nodes;
+		// if max_density is still zero, return an empty vector
+		return max_density == 0 ? decltype(max_nodes)() : max_nodes;
 	};
 
 	auto add_to_core = [&](std::vector<NodeID> const& nodes, std::size_t& vol_c, std::size_t& vol_p) {
@@ -130,9 +139,11 @@ Coloring egMethod(Graph const& graph)
 	
 	std::size_t vol_c = 0;
 	std::size_t vol_p = graph.getNumberOfEdges();
-	while (vol_c < vol_p) {
-		auto nodes = find_densest_subgraph();
+	bool core_changed = true;
+	while (core_changed) {
+		auto nodes = find_densest_subgraph(vol_c, vol_p);
 		add_to_core(nodes, vol_c, vol_p);
+		core_changed = !nodes.empty();
 	}
 
 	return coloring;
