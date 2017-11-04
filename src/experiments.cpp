@@ -38,12 +38,12 @@ auto Experiments::readExperiments(std::string const& experiments_file) -> Experi
 		ss >> graph_file >> dynamics_type_str >> cp_method_str
 		   >> max_rounds_str >> win_threshold_str >> number_of_exps_str;
 
-		experiments_data.emplace_back(graph_file,
-		                              toDynamicsType(dynamics_type_str),
-		                              toCPMethod(cp_method_str),
-		                              std::stoll(max_rounds_str),
-		                              std::stof(win_threshold_str),
-		                              std::stoull(number_of_exps_str));
+		experiments_data.push_back({graph_file,
+		                            toDynamicsType(dynamics_type_str),
+		                            toCPMethod(cp_method_str),
+		                            std::stoll(max_rounds_str),
+		                            std::stof(win_threshold_str),
+		                            std::stoull(number_of_exps_str)});
 	}
 
 	return experiments_data;
