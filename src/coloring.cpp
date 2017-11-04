@@ -9,7 +9,7 @@ Coloring::Coloring(std::size_t size)
 }
 
 Coloring::Coloring(std::size_t size, Color color)
-	: colors(size, color), color_counts(NUMBER_OF_COLORS, 0)
+	: colors(size, color), color_counts(COLORS.size(), 0)
 {
 	color_counts[static_cast<std::size_t>(color)] = colors.size();
 }

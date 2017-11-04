@@ -2,6 +2,7 @@
 
 #include "defs.h"
 
+#include <array>
 #include <string>
 #include <vector>
 
@@ -64,9 +65,9 @@ enum class Color : int_fast8_t {
 	Blue = 1,
 	None = -1
 };
+std::array<Color, 2> const COLORS = {Color::Red, Color::Blue};
+
 std::string toString(Color color);
-// FIXME: this is a bit hack-ish
-std::size_t const NUMBER_OF_COLORS = 2;
 
 //
 // Result

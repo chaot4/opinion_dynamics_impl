@@ -49,9 +49,10 @@ Color Simulation::getWinningColor(float win_threshold) const
 {
 	auto volumes = getColorVolumes();
 
-	for (std::size_t color_index = 0; color_index < NUMBER_OF_COLORS; ++color_index) {
+	for (auto color: COLORS) {
+		std::size_t color_index = static_cast<std::size_t>(color);
 		if (volumes[color_index] >= win_threshold) {
-			return static_cast<Color>(color_index);
+			return color;
 		}
 	}
 
@@ -62,14 +63,15 @@ std::vector<float> Simulation::getColorVolumes() const
 {
 
 	// count
-	std::vector<std::size_t> counts(NUMBER_OF_COLORS);
+	std::vector<std::size_t> counts(COLORS.size());
 	for (Graph::NodeID node_id = 0; node_id < graph.getNumberOfNodes(); ++node_id) {
-		std::size_t color_index = static_cast<std::size_t>(current_coloring.get(node_id));
+		auto color = current_coloring.get(node_id);
+		auto color_index = static_cast<std::size_t>(color);
 		counts[color_index] += graph.degree(node_id);
 	}
 
 	// normalize
-	std::vector<float> volume(NUMBER_OF_COLORS);
+	std::vector<float> volume(COLORS.size());
 	for (std::size_t i = 0; i < volume.size(); ++i) {
 		volume[i] = (float)counts[i]/graph.getNumberOfEdges();
 	}
