@@ -21,6 +21,8 @@ public:
 private:
 	// data strucutres
 	using ElementID = int64_t;
+	static ElementID const NO_ID = -1;
+
 	struct Element
 	{
 		ElementID const id;
@@ -30,8 +32,7 @@ private:
 		int tree_size;
 
 		Element(ElementID id, T value)
-			: id(id), value(value), parent_id(-1), tree_size(1) {}
-		// TODO: name -1 to something like NO_ID
+			: id(id), value(value), parent_id(NO_ID), tree_size(1) {}
 	};
 
 	std::unordered_map<T, ElementID> to_id;
@@ -97,7 +98,7 @@ auto UnionFind<T>::findRoot(ElementID const id) -> ElementID
 {
 	// find root
 	ElementID current_id = id;
-	while (elements[current_id].parent_id != -1) {
+	while (elements[current_id].parent_id != NO_ID) {
 		current_id = elements[current_id].parent_id;
 	}
 
