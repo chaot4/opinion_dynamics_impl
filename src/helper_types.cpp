@@ -1,5 +1,6 @@
 #include "helper_types.h"
 
+#include <algorithm>
 #include <chrono>
 
 //

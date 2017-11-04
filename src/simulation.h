@@ -10,8 +10,10 @@ class Simulation
 {
 public:
 	Simulation (Graph const& graph, DynamicsType dynamics_type, Coloring initial_coloring);
-	Result run(std::int64_t max_rounds);
+	Result run(std::int64_t max_rounds, float win_threshold);
 
+	float getLargestVolumeFraction() const;
+	Color getWinningColor(float win_threshold) const;
 	std::vector<float> getColorVolumes() const;
 
 private:

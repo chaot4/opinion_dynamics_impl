@@ -2,6 +2,8 @@
 
 #include "defs.h"
 
+#include <algorithm>
+
 Simulation::Simulation(Graph const& graph, DynamicsType dynamics_type,
                        Coloring initial_coloring)
 	: graph(graph), dynamics(dynamics_type, graph), initial_coloring(initial_coloring),
@@ -12,14 +14,16 @@ Simulation::Simulation(Graph const& graph, DynamicsType dynamics_type,
 	clear();
 }
 
-Result Simulation::run(std::int64_t max_rounds)
+Result Simulation::run(std::int64_t max_rounds, float win_threshold)
 {
 	clear();
 	max_rounds = (max_rounds == -1 ? graph.getNumberOfNodes() : max_rounds);
 
 	// run simulation
 	std::size_t round = 0;
-	while (round < (std::size_t)max_rounds && !current_coloring.isUnimodal()) {
+	while (round < (std::size_t)max_rounds &&
+		   getLargestVolumeFraction() < win_threshold) {
+
 		dynamics.simulateOneRound(current_coloring, next_coloring);
 		current_coloring.swap(next_coloring);
 		++round;
@@ -28,11 +32,30 @@ Result Simulation::run(std::int64_t max_rounds)
 	debug_assert(current_coloring.size() > 0);
 	return Result{
 		graph.getFilename(),
-		current_coloring.getWinningColor(),
+		getWinningColor(win_threshold),
 		current_coloring.getColorFractions(),
 		getColorVolumes(),
 		round
 	};
+}
+
+float Simulation::getLargestVolumeFraction() const
+{
+	auto volumes = getColorVolumes();
+	return *std::max_element(volumes.begin(), volumes.end());
+}
+
+Color Simulation::getWinningColor(float win_threshold) const
+{
+	auto volumes = getColorVolumes();
+
+	for (std::size_t color_index = 0; color_index < NUMBER_OF_COLORS; ++color_index) {
+		if (volumes[color_index] >= win_threshold) {
+			return static_cast<Color>(color_index);
+		}
+	}
+
+	return Color::None;
 }
 
 std::vector<float> Simulation::getColorVolumes() const

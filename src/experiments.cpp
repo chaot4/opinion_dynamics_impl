@@ -33,16 +33,17 @@ auto Experiments::readExperiments(std::string const& experiments_file) -> Experi
 		}
 
 		std::stringstream ss(line);
-		std::string graph_file, dynamics_type_string, cp_method_string,
-		            max_rounds_string, number_of_exps_string;
-		ss >> graph_file >> dynamics_type_string >> cp_method_string
-		   >> max_rounds_string >> number_of_exps_string;
+		std::string graph_file, dynamics_type_str, cp_method_str,
+		            max_rounds_str, win_threshold_str, number_of_exps_str;
+		ss >> graph_file >> dynamics_type_str >> cp_method_str
+		   >> max_rounds_str >> win_threshold_str >> number_of_exps_str;
 
 		experiments_data.emplace_back(graph_file,
-		                              toDynamicsType(dynamics_type_string),
-									  toCPMethod(cp_method_string),
-		                              std::stoll(max_rounds_string),
-									  std::stoull(number_of_exps_string));
+		                              toDynamicsType(dynamics_type_str),
+		                              toCPMethod(cp_method_str),
+		                              std::stoll(max_rounds_str),
+		                              std::stof(win_threshold_str),
+		                              std::stoull(number_of_exps_str));
 	}
 
 	return experiments_data;
@@ -60,8 +61,9 @@ void Experiments::run(ExperimentID id, ExperimentData const& experiment_data)
 
 	Results results;
 	for (std::size_t round = 0; round < experiment_data.number_of_exps; ++round) {
-		results.push_back(simulation.run(experiment_data.max_rounds));
-		writeResultToFile(id, experiment_data, results.back(), round);
+		auto result = simulation.run(experiment_data.max_rounds, experiment_data.win_threshold);
+		results.push_back(result);
+		writeResultToFile(id, experiment_data, result, round);
 	}
 
 	writeSummaryToFile(id, experiment_data, results);

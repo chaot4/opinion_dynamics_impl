@@ -28,17 +28,20 @@ struct ExperimentData
 	DynamicsType dynamics_type;
 	CPMethod cp_method;
 	std::int64_t max_rounds;
+	float win_threshold;
 	std::size_t number_of_exps;
 
 	ExperimentData(std::string graph_file,
 	               DynamicsType dynamics_type,
 	               CPMethod cp_method,
 	               std::int64_t max_rounds,
+	               float win_threshold,
 	               std::size_t number_of_exps)
 		: graph_file(graph_file)
 		, dynamics_type(dynamics_type)
 		, cp_method(cp_method)
 		, max_rounds(max_rounds)
+		, win_threshold(win_threshold)
 		, number_of_exps(number_of_exps) {}
 };
 using ExperimentsData = std::vector<ExperimentData>;
