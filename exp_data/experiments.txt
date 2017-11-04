@@ -1,2 +1,10 @@
-../exp_data/graphs/email-core.txt TwoChoices -1 10
-# ../exp_data/graphs/sn-twitter-combined.txt TwoChoices 16000 1
+# The lines are in the following format:
+#
+# <graph_file> <dynamics_type> <core_extraction_method> <max_rounds> <number_of_experiments>
+#
+# dynamice_type = TwoChoices | VoterModel
+# core_extraction_method = Paper | Ours
+# You can use -1 for max_rounds to use the default value, which is the number of nodes.
+#
+../exp_data/graphs/email-core.txt TwoChoices Ours -1 10
+../exp_data/graphs/sn-twitter-combined.txt TwoChoices Ours 16000 1
