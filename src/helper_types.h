@@ -1,10 +1,8 @@
 #pragma once
 
 // TODO: rename to "basic_types" or someting
-// TODO: maybe we should add some of those types to other files or even types
 #include "defs.h"
 
-#include <random>
 #include <string>
 #include <vector>
 
@@ -15,7 +13,7 @@ enum class DynamicsType {
 DynamicsType toDynamicsType(std::string const& dynamics_type_string);
 std::string toString(DynamicsType dynamics_type);
 
-enum class CPMethod { // TODO: chose less-dumb names
+enum class CPMethod { // TODO: choose less-dumb names
 	Paper,
 	EG // Emilio-Giacomo method (named after its famous inventors)
 };
@@ -55,29 +53,6 @@ std::string toString(Color color);
 // FIXME: this is a bit hack-ish
 std::size_t const NUMBER_OF_COLORS = 2;
 
-class Coloring
-{
-public:
-	Coloring(std::size_t size);
-	Coloring(std::size_t size, Color color);
-
-	std::size_t size() const { return colors.size(); }
-
-	Color get(std::size_t index) const;
-	void set(std::size_t index, Color new_color);
-	void assign(Coloring const& coloring);
-	void swap(Coloring& coloring);
-	bool isUnimodal() const;
-
-	Color getWinningColor() const;
-	std::vector<float> getColorFractions() const;
-	std::vector<float> getColorVolumes() const;
-
-private:
-	std::vector<Color> colors;
-	std::vector<std::size_t> color_counts;
-};
-
 struct Result
 {
 	std::string graph_file;
@@ -87,19 +62,3 @@ struct Result
 	std::size_t number_of_rounds;
 };
 using Results = std::vector<Result>;
-
-class Random
-{
-public:
-	Random();
-	Random(unsigned int seed);
-
-	unsigned int getSeed() const;
-
-	std::size_t getSizeT(std::size_t first, std::size_t last);
-	bool throwCoin();
-
-private:
-	unsigned int seed;
-	std::default_random_engine generator;
-};

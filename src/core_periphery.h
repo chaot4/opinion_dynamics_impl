@@ -1,7 +1,7 @@
 #pragma once
 
 #include "graph.h"
-#include "helper_types.h"
+#include "coloring.h"
 
 Coloring calculateCorePeripheryColoring(Graph const& graph, CPMethod method);
 

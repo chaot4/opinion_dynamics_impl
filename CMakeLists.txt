@@ -47,11 +47,13 @@ endif()
 # compile shared sources only once, and reuse object files in both,
 # as they are compiled with the same options anyway
 add_library(common OBJECT
+	src/coloring.cpp
 	src/core_periphery.cpp
 	src/dynamics.cpp
 	src/experiments.cpp
 	src/graph.cpp
 	src/helper_types.cpp
+	src/random.cpp
 	src/simulation.cpp
 )
 

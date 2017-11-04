@@ -3,7 +3,6 @@
 Dynamics::Dynamics(DynamicsType dynamics_type, Graph const& graph)
 	: type(dynamics_type), graph(graph) {}
 
-// TODO: use function reference instead which is set in the constructor?
 void Dynamics::simulateOneRound(Coloring const& current_coloring,
                                 Coloring& next_coloring)
 {
@@ -25,8 +24,6 @@ DynamicsType Dynamics::getType() const
 void Dynamics::executeVoterModel(Coloring const& current_coloring,
                                  Coloring& next_coloring)
 {
-	// FIXME: race condition
-	// #pragma omp parallel for schedule(dynamic)
 	for (Graph::NodeID node_id = 0; node_id < graph.getNumberOfNodes(); ++node_id) {
 		auto neighbor = graph.getRandomNeighbor(node_id, random);
 		auto neighbor_color = current_coloring.get(neighbor);
@@ -38,8 +35,6 @@ void Dynamics::executeVoterModel(Coloring const& current_coloring,
 void Dynamics::executeTwoChoices(Coloring const& current_coloring,
                                  Coloring& next_coloring)
 {
-	// FIXME: race condition
-	// #pragma omp parallel for schedule(dynamic)
 	for (Graph::NodeID node_id = 0; node_id < graph.getNumberOfNodes(); ++node_id) {
 		auto neighbor1 = graph.getRandomNeighbor(node_id, random);
 		auto neighbor2 = graph.getRandomNeighbor(node_id, random);

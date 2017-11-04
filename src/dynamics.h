@@ -1,7 +1,8 @@
 #pragma once
 
+#include "coloring.h"
 #include "graph.h"
-#include "helper_types.h"
+#include "random.h"
 
 class Dynamics
 {
