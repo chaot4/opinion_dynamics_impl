@@ -2,7 +2,7 @@
 
 #include "dynamics.h"
 #include "graph.h"
-#include "helper_types.h"
+#include "basic_types.h"
 
 #include <cstdint>
 

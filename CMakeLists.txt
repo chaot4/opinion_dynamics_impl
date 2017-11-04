@@ -52,7 +52,7 @@ add_library(common OBJECT
 	src/dynamics.cpp
 	src/experiments.cpp
 	src/graph.cpp
-	src/helper_types.cpp
+	src/basic_types.cpp
 	src/random.cpp
 	src/simulation.cpp
 )

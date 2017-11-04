@@ -1,7 +1,7 @@
 #pragma once
 
 #include "graph.h"
-#include "helper_types.h"
+#include "basic_types.h"
 #include "simulation.h"
 
 #include <string>

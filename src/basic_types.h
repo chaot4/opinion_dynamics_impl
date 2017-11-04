@@ -1,10 +1,13 @@
 #pragma once
 
-// TODO: rename to "basic_types" or someting
 #include "defs.h"
 
 #include <string>
 #include <vector>
+
+//
+// DynamicsType
+//
 
 enum class DynamicsType {
 	VoterModel,
@@ -13,12 +16,20 @@ enum class DynamicsType {
 DynamicsType toDynamicsType(std::string const& dynamics_type_string);
 std::string toString(DynamicsType dynamics_type);
 
+//
+// CPMethod
+//
+
 enum class CPMethod { // TODO: choose less-dumb names
 	Paper,
 	EG // Emilio-Giacomo method (named after its famous inventors)
 };
 CPMethod toCPMethod(std::string const& cp_method_string);
 std::string toString(CPMethod cp_method);
+
+//
+// ExperimentData
+//
 
 struct ExperimentData
 {
@@ -44,6 +55,10 @@ struct ExperimentData
 };
 using ExperimentsData = std::vector<ExperimentData>;
 
+//
+// Color
+//
+
 enum class Color : int_fast8_t {
 	Red = 0,
 	Blue = 1,
@@ -52,6 +67,10 @@ enum class Color : int_fast8_t {
 std::string toString(Color color);
 // FIXME: this is a bit hack-ish
 std::size_t const NUMBER_OF_COLORS = 2;
+
+//
+// Result
+//
 
 struct Result
 {
