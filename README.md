@@ -1,5 +1,5 @@
 = requirements =
-- C++ compiler with full support of C++11
+- C++ compiler with full support of C++14
 - CMake
 
 = build =

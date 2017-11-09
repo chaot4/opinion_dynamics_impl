@@ -1,16 +1,3 @@
-# USING cmake:
-#   mkdir build
-#   cd build
-#   cmake ..
-#   make -j
-
-# RUN unit tests:
-#   cd build
-#   ctest
-
-
-
-# OBJECT library requires 2.8.8
 cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
 project(opinion_dynamics CXX)
 
@@ -44,8 +31,6 @@ if(NOT VERBOSE)
 	add_definitions(-DNVERBOSE)
 endif()
 
-# compile shared sources only once, and reuse object files in both,
-# as they are compiled with the same options anyway
 add_library(common OBJECT
 	src/coloring.cpp
 	src/core_periphery.cpp
