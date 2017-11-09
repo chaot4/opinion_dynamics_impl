@@ -7,7 +7,6 @@
 namespace
 {
 
-// FIXME: this is not correct if the graph is directed (which it isn't for now)
 Coloring calcKRichClub(Graph const& graph)
 {
 	Coloring coloring(graph.getNumberOfNodes(), Color::Blue);
@@ -111,7 +110,7 @@ Coloring calcDensestCore(Graph const& graph)
 			auto degree = graph.degree(node_id);
 			vol_c -= degree;
 			vol_p += degree;
-			if (vol_c > vol_p) { continue; } // TODO: make parametrizable from the exp file
+			if (vol_c > vol_p) { continue; }
 
 			// check for new max
 			double density = (double)edge_count/node_deg_map.size();
