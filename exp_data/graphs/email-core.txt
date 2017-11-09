@@ -1,3 +1,5 @@
+# This dataset is taken from https://snap.stanford.edu/.
+# It is used as example dataset here.
 0 0
 0 1
 0 101
