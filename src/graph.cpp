@@ -9,8 +9,6 @@
 #include <fstream>
 #include <sstream>
 
-// TODO: usage of map and set shouldn't be necessary... try to remove.
-
 void Graph::buildFromFile(std::string const& graph_file)
 {
 	filename = graph_file;
