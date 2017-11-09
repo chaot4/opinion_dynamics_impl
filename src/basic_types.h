@@ -21,9 +21,9 @@ std::string toString(DynamicsType dynamics_type);
 // CPMethod
 //
 
-enum class CPMethod { // TODO: choose less-dumb names
-	Paper,
-	EG // Emilio-Giacomo method (named after its famous inventors)
+enum class CPMethod {
+	KRichClub,
+	DensestCore
 };
 CPMethod toCPMethod(std::string const& cp_method_string);
 std::string toString(CPMethod cp_method);

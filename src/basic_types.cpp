@@ -30,11 +30,11 @@ std::string toString(DynamicsType dynamics_type)
 
 CPMethod toCPMethod(std::string const& cp_method_string)
 {
-	if (cp_method_string == "Paper") {
-		return CPMethod::Paper;
+	if (cp_method_string == "KRichClub") {
+		return CPMethod::KRichClub;
 	}
-	else if (cp_method_string == "Ours") {
-		return CPMethod::EG;
+	else if (cp_method_string == "DensestCore") {
+		return CPMethod::DensestCore;
 	}
 
 	Error("No matching core extraction method on call of toCPMethod");
@@ -43,8 +43,8 @@ CPMethod toCPMethod(std::string const& cp_method_string)
 std::string toString(CPMethod cp_method)
 {
 	switch (cp_method) {
-	case CPMethod::Paper: return "Paper";
-	case CPMethod::EG: default: return "Ours";
+	case CPMethod::KRichClub: return "KRichClub";
+	case CPMethod::DensestCore: default: return "DensestCore";
 	}
 }
 

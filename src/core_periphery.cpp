@@ -8,7 +8,7 @@ namespace
 {
 
 // FIXME: this is not correct if the graph is directed (which it isn't for now)
-Coloring paperMethod(Graph const& graph)
+Coloring calcKRichClub(Graph const& graph)
 {
 	Coloring coloring(graph.getNumberOfNodes(), Color::Blue);
 
@@ -38,7 +38,7 @@ Coloring paperMethod(Graph const& graph)
 }
 
 // TODO: clean up this mess!
-Coloring egMethod(Graph const& graph)
+Coloring calcDensestCore(Graph const& graph)
 {
 	using NodeID = Graph::NodeID;
 
@@ -154,10 +154,10 @@ Coloring egMethod(Graph const& graph)
 Coloring calculateCorePeripheryColoring(Graph const& graph, CPMethod method)
 {
 	switch (method) {
-	case CPMethod::EG:
-		return egMethod(graph);
-	case CPMethod::Paper: default:
-		return paperMethod(graph);
+	case CPMethod::DensestCore:
+		return calcDensestCore(graph);
+	case CPMethod::KRichClub: default:
+		return calcKRichClub(graph);
 	}
 }
 
