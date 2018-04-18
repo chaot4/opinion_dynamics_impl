@@ -1,11 +1,11 @@
-= requirements =
+## requirements
 - C++ compiler with full support of C++14
 - CMake
 
-= build =
+## build
 - execute ./build.sh
 
-= use =
+## use
 - go to build directory
 - executing ./main prints the usage
 - test data is given in the directory exp\_data
